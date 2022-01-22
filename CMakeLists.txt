@@ -10,7 +10,7 @@ project(${PROJECT_NAME})
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs message_generation rio_control_node)
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs message_generation rio_control_node tf2)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -149,9 +149,10 @@ message("CATKIN INCLUDES:${catkin_INCLUDE_DIRS}")
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+  tf2
+)
 
 #############
 ## Install ##
