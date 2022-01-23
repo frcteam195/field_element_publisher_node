@@ -730,6 +730,39 @@ void publish_tarmac_links()
 	}
 }
 
+void publish_terminal_link(bool is_red)
+{
+	geometry_msgs::TransformStamped transformStamped;
+
+	std::string base_link;
+
+	if (is_red)
+	{
+		transformStamped.header.frame_id = "red_link";
+		transformStamped.child_frame_id = "red_terminal_link";
+	}
+	else
+	{
+		transformStamped.header.frame_id = "blue_link";
+		transformStamped.child_frame_id = "blue_terminal_link";
+	}
+
+	transformStamped.header.stamp = ros::Time::now();
+
+	transformStamped.transform.translation.x = 69 * INCHES_TO_METERS;
+	transformStamped.transform.translation.y = (((27 * 12 - 252) / 2) + 252) * INCHES_TO_METERS;
+	transformStamped.transform.translation.z = 0.0;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
+}
+
 void publish_hub_objects(void)
 {
 	publish_hub_link();
@@ -757,11 +790,6 @@ void publisher_loop(void)
 
 		rate_control.sleep();
 	}
-}
-
-void create_tarmac_links()
-{
-
 }
 
 int main(int argc, char **argv)
