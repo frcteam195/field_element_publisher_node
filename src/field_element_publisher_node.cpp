@@ -110,6 +110,36 @@ void publish_hub_link (void)
 	transformStamped.transform.rotation.w = q.w();
 
 	tfBroadcaster->sendTransform(transformStamped);
+
+	transformStamped.header.frame_id = "hub_link";
+	transformStamped.child_frame_id = "red_hub_link";
+
+	transformStamped.transform.translation.x = 0.0;
+	transformStamped.transform.translation.y = 0.0;
+	transformStamped.transform.translation.z = 0.0;
+
+	q.setRPY(0,0,0);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
+
+	transformStamped.header.frame_id = "hub_link";
+	transformStamped.child_frame_id = "blue_hub_link";
+
+	transformStamped.transform.translation.x = 0.0;
+	transformStamped.transform.translation.y = 0.0;
+	transformStamped.transform.translation.z = 0.0;
+
+	q.setRPY(0,0,180.0 * DEGREES_TO_RADIANS);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
 }
 
 void publish_hub_full_height (void)
@@ -914,7 +944,7 @@ void publish_hangar_pillars(void)
 
 void publish_hangar_connector(void)
 {
-		visualization_msgs::Marker hangar;
+	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "hangar_link";
 	hangar.header.stamp = ros::Time::now();
 	hangar.ns = "hangar";;
@@ -944,6 +974,148 @@ void publish_hangar_connector(void)
 	hangar.color.a = 1.0;
 
 	vis_pub.publish(hangar);
+}
+
+void publish_hub_ball_links(bool is_red)
+{
+	geometry_msgs::TransformStamped transformStamped;
+	std::string link_prefix;
+
+	transformStamped.header.stamp = ros::Time::now();
+
+	switch (is_red)
+	{
+		case true:
+		{
+			transformStamped.header.frame_id = "red_hub_link";
+			link_prefix = "red_";
+		}
+		break;
+
+		case false:
+		{
+			transformStamped.header.frame_id = "blue_hub_link";
+			link_prefix = "blue_";
+		}
+		break;
+	}
+
+	float angle;
+	float angle_1 = 11.25;
+	float angle_2 = 22.5;
+
+	for (int i = 0; i < 6; i ++)
+	{
+		switch(i)
+		{
+			case 0:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_1";
+				angle = (-90 - angle_1 - angle_2) * DEGREES_TO_RADIANS;
+			}
+			break;
+			case 1:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_2";
+				angle = (-180 - angle_1) * DEGREES_TO_RADIANS;
+			}
+			break;
+			case 2:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_3";
+				angle = (-270 + angle_1 + angle_2) * DEGREES_TO_RADIANS;
+			}
+			break;
+			case 3:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_4";
+				angle = (-270 - angle_1) * DEGREES_TO_RADIANS;
+			}
+			break;
+			case 4:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_5";
+				angle = angle_1 * DEGREES_TO_RADIANS;
+			}
+			break;
+			case 5:
+			default:
+			{
+				transformStamped.child_frame_id = link_prefix + "ball_6";
+				angle = (-90 + angle_1) * DEGREES_TO_RADIANS;
+			}
+			break;
+		}
+
+		geometry_msgs::Point base;
+		base.x = 0;
+		base.y = 0;
+		base.z = 0;
+
+		geometry_msgs::Point result = compute_offset(base, angle, 153.0 * INCHES_TO_METERS);
+
+		transformStamped.transform.translation.x = result.x;
+		transformStamped.transform.translation.y = result.y;
+		transformStamped.transform.translation.z = 0.0;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,-angle);
+		transformStamped.transform.rotation.x = q.x();
+		transformStamped.transform.rotation.y = q.y();
+		transformStamped.transform.rotation.z = q.z();
+		transformStamped.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(transformStamped);
+	}
+}
+
+void render_balls()
+{
+	for (int j = 0; j < 2; j++)
+	{
+		std::string prefix = j == 0 ? "red_" : "blue_";
+
+		std_msgs::ColorRGBA color;
+		color.r = j == 0 ? 1 : 0;
+		color.g = 0;
+		color.b = j == 0 ? 0 : 1;
+		color.a = 1.0;
+
+		for (int i = 0; i < 6; i++)
+		{
+			std::stringstream ss;
+			ss << prefix << "ball_" << i + 1;
+
+			visualization_msgs::Marker ball;
+			ball.header.frame_id = ss.str();
+
+			ball.header.stamp = ros::Time::now();
+			ball.ns = "balls";;
+			ball.id = (j * 6) + i;
+			ball.type = visualization_msgs::Marker::SPHERE;
+			ball.action = visualization_msgs::Marker::ADD;
+
+			ball.pose.position.x = 0;
+			ball.pose.position.y = 0;
+			ball.pose.position.z = .2413 / 2.0;
+
+			tf2::Quaternion q;
+			q.setRPY(0,0,0);
+
+			ball.pose.orientation.x = q.x();
+			ball.pose.orientation.y = q.y();
+			ball.pose.orientation.z = q.z();
+			ball.pose.orientation.w = q.w();
+
+			ball.scale.x = .2413;
+			ball.scale.y = .2413;
+			ball.scale.z = .2413;
+
+			ball.color = color;
+
+			vis_pub.publish(ball);
+		}
+	}
 }
 
 void publish_hangar_objects(void)
@@ -979,6 +1151,9 @@ void publisher_loop(void)
 		publish_terminal_link(false);
 		publish_terminal_cube(true);
 		publish_terminal_cube(false);
+		publish_hub_ball_links(true);
+		publish_hub_ball_links(false);
+		render_balls();
 
 		publish_hangar_objects();
 
