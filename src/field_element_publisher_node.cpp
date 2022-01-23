@@ -26,6 +26,16 @@ ros::NodeHandle* node;
 
 tf2_ros::TransformBroadcaster * tfBroadcaster;
 
+geometry_msgs::Point compute_offset(geometry_msgs::Point base, float angle, float distance)
+{
+	geometry_msgs::Point result = base;
+
+	result.x += cos(angle) * distance;
+	result.y += -sin(angle) * distance;
+
+	return result;
+}
+
 void publish_red_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
@@ -190,8 +200,8 @@ void publish_field_centerline()
 
 	center_line.type = visualization_msgs::Marker::LINE_STRIP;
 	center_line.action = visualization_msgs::Marker::ADD;
-	center_line.id = 0;
-	center_line.ns = "Centerline";
+	center_line.id = 15;
+	center_line.ns = "Hub";
 	center_line.color.r = 1;
 	center_line.color.g = 1;
 	center_line.color.b = 1;
@@ -251,7 +261,7 @@ void publish_hub_cylinder(void)
 	hub.scale.x = 4.0 * FEET_TO_METERS;
 	hub.scale.y = 4.0 * FEET_TO_METERS;
 	hub.scale.z = 2.64;
-	
+
 	hub.color.r = 0.7;
 	hub.color.g = 0.7;
 	hub.color.b = 0.7;
@@ -265,27 +275,27 @@ void publish_hub_base(void)
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
 	hub.header.stamp = ros::Time::now();
-	hub.ns = "Hub";;
+	hub.ns = "Hub";
 	hub.id = 5;
 	hub.type = visualization_msgs::Marker::CUBE;
 	hub.action = visualization_msgs::Marker::ADD;
 
 	hub.pose.position.x = 0;
 	hub.pose.position.y = 0;
-	hub.pose.position.z = 2.64 / 2.0;
+	hub.pose.position.z = (22.5 * INCHES_TO_METERS) / 2;
 
 	tf2::Quaternion q;
-	q.setRPY(0,0,0);
+	q.setRPY(0,0,45 * DEGREES_TO_RADIANS);
 
 	hub.pose.orientation.x = q.x();
 	hub.pose.orientation.y = q.y();
 	hub.pose.orientation.z = q.z();
 	hub.pose.orientation.w = q.w();
 
-	hub.scale.x = 4.0 * FEET_TO_METERS;
-	hub.scale.y = 4.0 * FEET_TO_METERS;
-	hub.scale.z = 2.64;
-	
+	hub.scale.x = 67.77 * INCHES_TO_METERS;
+	hub.scale.y = 67.77 * INCHES_TO_METERS;
+	hub.scale.z = 22.5 * INCHES_TO_METERS;
+
 	hub.color.r = 0.7;
 	hub.color.g = 0.7;
 	hub.color.b = 0.7;
@@ -294,15 +304,184 @@ void publish_hub_base(void)
 	vis_pub.publish(hub);
 }
 
-geometry_msgs::Point compute_offset(geometry_msgs::Point base, float angle, float distance)
+void publish_hub_lower_cylinder(void)
 {
-	geometry_msgs::Point result = base;
+	visualization_msgs::Marker hub;
+	hub.header.frame_id = "hub_link";
+	hub.header.stamp = ros::Time::now();
+	hub.ns = "Hub";
+	hub.id = 6;
+	hub.type = visualization_msgs::Marker::CYLINDER;
+	hub.action = visualization_msgs::Marker::ADD;
 
-	result.x += cos(angle) * distance;
-	result.y += -sin(angle) * distance;
+	hub.pose.position.x = 0;
+	hub.pose.position.y = 0;
+	hub.pose.position.z = 1.04 / 2.0;
 
-	return result;
+	tf2::Quaternion q;
+	q.setRPY(0,0,45 * DEGREES_TO_RADIANS);
+
+	hub.pose.orientation.x = q.x();
+	hub.pose.orientation.y = q.y();
+	hub.pose.orientation.z = q.z();
+	hub.pose.orientation.w = q.w();
+
+	hub.scale.x = 31.88 * 2.0 * INCHES_TO_METERS;
+	hub.scale.y = 31.88 * 2.0 * INCHES_TO_METERS;
+	hub.scale.z = 1.04;
+
+	hub.color.r = 0.7;
+	hub.color.g = 0.7;
+	hub.color.b = 0.7;
+	hub.color.a = 1.0;
+
+	vis_pub.publish(hub);
 }
+
+void publish_hub_upper_return(int base_id, float angle)
+{
+	visualization_msgs::Marker hub;
+	hub.header.frame_id = "hub_link";
+	hub.header.stamp = ros::Time::now();
+	hub.ns = "Hub";
+	hub.id = base_id + 7;
+	hub.type = visualization_msgs::Marker::CUBE;
+	hub.action = visualization_msgs::Marker::ADD;
+
+	geometry_msgs::Point base;
+	base.x = 0;
+	base.y = 0;
+	base.z = 1.71;
+
+	geometry_msgs::Point center_point = compute_offset(base, angle * DEGREES_TO_RADIANS, (67.68 / 2.0) * INCHES_TO_METERS);
+
+	hub.pose.position = center_point;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,-angle * DEGREES_TO_RADIANS);
+
+	hub.pose.orientation.x = q.x();
+	hub.pose.orientation.y = q.y();
+	hub.pose.orientation.z = q.z();
+	hub.pose.orientation.w = q.w();
+
+	hub.scale.x = 67.68 * INCHES_TO_METERS;
+	hub.scale.y = 30.98 * INCHES_TO_METERS;
+	hub.scale.z = 0.1;
+
+	hub.color.r = 0.7;
+	hub.color.g = 0.7;
+	hub.color.b = 0.7;
+	hub.color.a = 1.0;
+
+	vis_pub.publish(hub);
+}
+
+void publish_hub_upper_returns(void)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		float angle;
+		switch(i)
+		{
+			case 0:
+			{
+				angle = 0;
+			}
+			break;
+			case 1:
+			{
+				angle = 90;
+			}
+			break;
+			case 2:
+			{
+				angle = 180;
+			}
+			break;
+			case 3:
+			{
+				angle = 270;
+			}
+			break;
+		}
+
+		publish_hub_upper_return(i, angle);
+	}
+}
+
+void publish_hub_lower_return(int base_id, float angle)
+{
+	visualization_msgs::Marker hub;
+	hub.header.frame_id = "hub_link";
+	hub.header.stamp = ros::Time::now();
+	hub.ns = "Hub";
+	hub.id = base_id + 11;
+	hub.type = visualization_msgs::Marker::CUBE;
+	hub.action = visualization_msgs::Marker::ADD;
+
+	geometry_msgs::Point base;
+	base.x = 0;
+	base.y = 0;
+	base.z = 0.57 / 2.0;
+
+	geometry_msgs::Point center_point = compute_offset(base, angle * DEGREES_TO_RADIANS, (53.5 / 2.0) * INCHES_TO_METERS);
+
+	hub.pose.position = center_point;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,-angle * DEGREES_TO_RADIANS);
+
+	hub.pose.orientation.x = q.x();
+	hub.pose.orientation.y = q.y();
+	hub.pose.orientation.z = q.z();
+	hub.pose.orientation.w = q.w();
+
+	hub.scale.x = 53.5 * INCHES_TO_METERS;
+	hub.scale.y = 14 * INCHES_TO_METERS;
+	hub.scale.z = 0.57;
+
+	hub.color.r = 0.7;
+	hub.color.g = 0.7;
+	hub.color.b = 0.7;
+	hub.color.a = 1.0;
+
+	vis_pub.publish(hub);
+}
+
+void publish_hub_lower_returns(void)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		float angle;
+		switch(i)
+		{
+			case 0:
+			{
+				angle = 0;
+			}
+			break;
+			case 1:
+			{
+				angle = 90;
+			}
+			break;
+			case 2:
+			{
+				angle = 180;
+			}
+			break;
+			case 3:
+			{
+				angle = 270;
+			}
+			break;
+		}
+
+		publish_hub_lower_return(i, angle);
+	}
+}
+
 
 void publish_tarmac_lines(int base_id, std::string base_link, bool color_is_red)
 {
@@ -439,6 +618,10 @@ void publish_hub_objects(void)
 	publish_hub_link();
 	publish_hub_full_height();
 	publish_hub_cylinder();
+	publish_hub_lower_cylinder();
+	publish_hub_base();
+	publish_hub_upper_returns();
+	publish_hub_lower_returns();
 	publish_tarmac_links();
 }
 
@@ -482,8 +665,8 @@ int main(int argc, char **argv)
 
 	node = &n;
 
-	vis_pub = node->advertise<visualization_msgs::Marker> ("visualization_marker", 1);
-    
+	vis_pub = node->advertise<visualization_msgs::Marker> ("visualization_marker", 100);
+
 	tfBroadcaster = new tf2_ros::TransformBroadcaster();
 
     std::thread publisher_thread(publisher_loop);
