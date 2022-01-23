@@ -759,18 +759,61 @@ void publish_terminal_link(bool is_red)
 
 	transformStamped.header.stamp = ros::Time::now();
 
-	transformStamped.transform.translation.x = 69 * INCHES_TO_METERS;
-	transformStamped.transform.translation.y = (((27 * 12 - 252) / 2) + 252) * INCHES_TO_METERS;
+	transformStamped.transform.translation.x = (69 * INCHES_TO_METERS) / 2.0;
+	transformStamped.transform.translation.y = -((((27.0 * 12.0) - 252.0) / 2.0) + 252.0) * INCHES_TO_METERS;
 	transformStamped.transform.translation.z = 0.0;
 
 	tf2::Quaternion q;
-	q.setRPY(0,0,0);
+	q.setRPY(0,0,43.781 * DEGREES_TO_RADIANS);
 	transformStamped.transform.rotation.x = q.x();
 	transformStamped.transform.rotation.y = q.y();
 	transformStamped.transform.rotation.z = q.z();
 	transformStamped.transform.rotation.w = q.w();
 
 	tfBroadcaster->sendTransform(transformStamped);
+}
+
+void publish_terminal_cube(bool is_red)
+{
+	visualization_msgs::Marker terminal;
+
+	if (is_red)
+	{
+		terminal.header.frame_id = "red_terminal_link";
+	}
+	else
+	{
+		terminal.header.frame_id = "blue_terminal_link";
+	}
+
+	terminal.header.stamp = ros::Time::now();
+	terminal.ns = "terminals";
+	terminal.id = is_red ? 0 : 1;
+	terminal.type = visualization_msgs::Marker::CUBE;
+	terminal.action = visualization_msgs::Marker::ADD;
+
+	terminal.pose.position.x = -(39.0 / 2.0) * INCHES_TO_METERS;
+	terminal.pose.position.y = 0;
+	terminal.pose.position.z = (42.42 / 2.0) * INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	terminal.pose.orientation.x = q.x();
+	terminal.pose.orientation.y = q.y();
+	terminal.pose.orientation.z = q.z();
+	terminal.pose.orientation.w = q.w();
+
+	terminal.scale.x = 39.0 * INCHES_TO_METERS;
+	terminal.scale.y = 97.13 * INCHES_TO_METERS;
+	terminal.scale.z = 42.42 * INCHES_TO_METERS;
+
+	terminal.color.r = 0.7;
+	terminal.color.g = 0.7;
+	terminal.color.b = 0.7;
+	terminal.color.a = 1.0;
+
+	vis_pub.publish(terminal);
 }
 
 void publish_hangar_link (void)
@@ -932,6 +975,10 @@ void publisher_loop(void)
 		publish_blue_link();
 		publish_field_perimeter();
 		publish_field_centerline();
+		publish_terminal_link(true);
+		publish_terminal_link(false);
+		publish_terminal_cube(true);
+		publish_terminal_cube(false);
 
 		publish_hangar_objects();
 
