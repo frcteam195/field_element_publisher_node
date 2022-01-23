@@ -100,6 +100,16 @@ void publish_hub_link (void)
 	transformStamped.transform.rotation.w = q.w();
 
 	tfBroadcaster->sendTransform(transformStamped);
+
+	transformStamped.child_frame_id = "hub_unaligned";
+
+	q.setRPY(0,0,0);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
 }
 
 void publish_hub_full_height (void)
