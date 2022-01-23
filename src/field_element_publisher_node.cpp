@@ -763,6 +763,108 @@ void publish_terminal_link(bool is_red)
 	tfBroadcaster->sendTransform(transformStamped);
 }
 
+void publish_hangar_link (void)
+{
+	geometry_msgs::TransformStamped transformStamped;
+
+	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.frame_id = "red_link";
+	transformStamped.child_frame_id = "hangar_link";
+
+	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.y = (-9.020833 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.z = 0.0;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0 * DEGREES_TO_RADIANS);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
+}
+
+void publish_one_pillar(int a, int b, int p)
+{
+	visualization_msgs::Marker hangar;
+	hangar.header.frame_id = "hangar_link";
+	hangar.header.stamp = ros::Time::now();
+	hangar.ns = "Hangar";;
+	hangar.id = p;
+	hangar.type = visualization_msgs::Marker::CUBE;
+	hangar.action = visualization_msgs::Marker::ADD;
+
+	hangar.pose.position.x = a * FEET_TO_METERS;
+	hangar.pose.position.y = b * FEET_TO_METERS;
+	hangar.pose.position.z = 6.1667/2 * FEET_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	hangar.pose.orientation.x = q.x();
+	hangar.pose.orientation.y = q.y();
+	hangar.pose.orientation.z = q.z();
+	hangar.pose.orientation.w = q.w();
+
+	hangar.scale.x = 1 * FEET_TO_METERS;
+	hangar.scale.y = 1 * FEET_TO_METERS;
+	hangar.scale.z = 6.1667 * FEET_TO_METERS;
+
+	hangar.color.r = 0.7;
+	hangar.color.g = 0.7;
+	hangar.color.b = 0.7;
+	hangar.color.a = 1.0;
+
+	vis_pub.publish(hangar);
+}
+
+void publish_hangar_pillars(void)
+{
+
+	publish_one_pillar(-4.5625, -4.09375, 0);
+	publish_one_pillar(-4.5625, 4.09375, 1);
+	publish_one_pillar(4.5625, -4.09375, 2);
+	publish_one_pillar(4.5625, 4.09375, 3);
+
+	visualization_msgs::Marker hangar;
+	hangar.header.frame_id = "hangar_link";
+	hangar.header.stamp = ros::Time::now();
+	hangar.ns = "Hangar";;
+	hangar.id = 4;
+	hangar.type = visualization_msgs::Marker::CUBE;
+	hangar.action = visualization_msgs::Marker::ADD;
+
+	hangar.pose.position.x = 0;
+	hangar.pose.position.y = 4.005215* FEET_TO_METERS;
+	hangar.pose.position.z = 1.725;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	hangar.pose.orientation.x = q.x();
+	hangar.pose.orientation.y = q.y();
+	hangar.pose.orientation.z = q.z();
+	hangar.pose.orientation.w = q.w();
+
+	hangar.scale.x = 10.125 * FEET_TO_METERS;
+	hangar.scale.y = 1 * FEET_TO_METERS;
+	hangar.scale.z = 1 * FEET_TO_METERS;
+
+	hangar.color.r = 0.7;
+	hangar.color.g = 0.7;
+	hangar.color.b = 0.7;
+	hangar.color.a = 1.0;
+
+	vis_pub.publish(hangar);
+}
+
+void publish_hangar_objects(void)
+{
+	publish_hangar_link();
+	publish_hangar_pillars();
+}
+
 void publish_hub_objects(void)
 {
 	publish_hub_link();
@@ -785,6 +887,8 @@ void publisher_loop(void)
 		publish_blue_link();
 		publish_field_perimeter();
 		publish_field_centerline();
+
+		publish_hangar_objects();
 
 		publish_hub_objects();
 
