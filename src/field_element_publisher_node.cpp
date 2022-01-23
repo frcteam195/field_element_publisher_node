@@ -124,6 +124,58 @@ void publish_hub_full_height (void)
 	tfBroadcaster->sendTransform(transformStamped);
 }
 
+void create_player_station(int base_id, std::string base_link)
+{
+	visualization_msgs::Marker player_station;
+	player_station.header.stamp = ros::Time::now();
+	player_station.header.frame_id = base_link;
+
+	player_station.type = visualization_msgs::Marker::LINE_STRIP;
+	player_station.action = visualization_msgs::Marker::ADD;
+	player_station.id = base_id;
+	player_station.ns = "FieldWall";
+	player_station.color.r = 1;
+	player_station.color.g = 1;
+	player_station.color.b = 1;
+	player_station.color.a = 1;
+	player_station.scale.x = .03;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	player_station.pose.orientation.x = q.x();
+	player_station.pose.orientation.y = q.y();
+	player_station.pose.orientation.z = q.z();
+	player_station.pose.orientation.w = q.w();
+
+	player_station.pose.position.x = 0;
+	player_station.pose.position.y = 0;
+	player_station.pose.position.z = 0;
+
+	geometry_msgs::Point field_point;
+	field_point.x = 0;
+	field_point.y = 0;
+	field_point.z = 0;
+	player_station.points.push_back(field_point);
+
+	field_point.x = 0;
+	field_point.y = 0;
+	field_point.z = 77.63 * INCHES_TO_METERS;
+	player_station.points.push_back(field_point);
+
+	field_point.x = 0;
+	field_point.y = -249.64 * INCHES_TO_METERS;
+	field_point.z = 77.63 * INCHES_TO_METERS;
+	player_station.points.push_back(field_point);
+
+	field_point.x = 0;
+	field_point.y = -249.64 * INCHES_TO_METERS;
+	field_point.z = 0;
+	player_station.points.push_back(field_point);
+
+	vis_pub.publish(player_station);
+}
+
 void publish_field_perimeter(void)
 {
 	visualization_msgs::Marker field_perimeter;
@@ -189,6 +241,71 @@ void publish_field_perimeter(void)
 	field_perimeter.points.push_back(field_point);
 
 	vis_pub.publish(field_perimeter);
+
+	visualization_msgs::Marker field_perimeter2;
+	field_perimeter2.header.stamp = ros::Time::now();
+	field_perimeter2.header.frame_id = "red_link";
+
+	field_perimeter2.type = visualization_msgs::Marker::LINE_STRIP;
+	field_perimeter2.action = visualization_msgs::Marker::ADD;
+	field_perimeter2.id = 1;
+	field_perimeter2.ns = "FieldWall";
+	field_perimeter2.color.r = 1;
+	field_perimeter2.color.g = 1;
+	field_perimeter2.color.b = 1;
+	field_perimeter2.color.a = 1;
+	field_perimeter2.scale.x = .03;
+
+	q.setRPY(0,0,0);
+
+	field_perimeter2.pose.orientation.x = q.x();
+	field_perimeter2.pose.orientation.y = q.y();
+	field_perimeter2.pose.orientation.z = q.z();
+	field_perimeter2.pose.orientation.w = q.w();
+
+	field_perimeter2.pose.position.x = 0;
+	field_perimeter2.pose.position.y = 0;
+	field_perimeter2.pose.position.z = 0;
+
+	field_point.x = 0;
+	field_point.y = 0;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = 0;
+	field_point.y = -252 * INCHES_TO_METERS;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = 69 * INCHES_TO_METERS;
+	field_point.y = -27 * FEET_TO_METERS;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = 54 * FEET_TO_METERS;
+	field_point.y = -27 * FEET_TO_METERS;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = 54 * FEET_TO_METERS;
+	field_point.y = (-27 * FEET_TO_METERS) + (252 * INCHES_TO_METERS);
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = (54 * FEET_TO_METERS) - (69 * INCHES_TO_METERS);
+	field_point.y = 0;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	field_point.x = 0;
+	field_point.y = 0;
+	field_point.z = 20 * INCHES_TO_METERS;
+	field_perimeter2.points.push_back(field_point);
+
+	vis_pub.publish(field_perimeter2);
+
+	create_player_station(2, "red_link");
+	create_player_station(3, "blue_link");
 }
 
 void publish_field_centerline()
