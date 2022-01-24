@@ -986,7 +986,7 @@ void publish_terminal_ball_link()
 
 		transformStamped.header.stamp = ros::Time::now();
 		transformStamped.header.frame_id = is_red ? "red_terminal_link" : "blue_terminal_link";
-		transformStamped.child_frame_id = is_red ? "blue_ball_7" : "red_ball_7";
+		transformStamped.child_frame_id = is_red ? "red_ball_7" : "blue_ball_7";
 
 		transformStamped.transform.translation.x = 10.43 * INCHES_TO_METERS;
 		transformStamped.transform.translation.y = 0;
@@ -1000,6 +1000,39 @@ void publish_terminal_ball_link()
 		transformStamped.transform.rotation.w = q.w();
 
 		tfBroadcaster->sendTransform(transformStamped);
+	}
+}
+
+void publish_cargo_line_ball_links()
+{
+	for (int j = 0; j < 2; j ++)
+	{
+		bool is_red = j == 0;
+
+		for(int i = 0; i < 3; i++)
+		{
+			geometry_msgs::TransformStamped transformStamped;
+
+			std::stringstream ss;
+			ss << (is_red ? "red_" : "blue_") << "ball_" << (8 + i);
+
+			transformStamped.header.stamp = ros::Time::now();
+			transformStamped.header.frame_id = is_red ? "red_link" : "blue_link";
+			transformStamped.child_frame_id = ss.str();
+
+			transformStamped.transform.translation.x = 6.0 * INCHES_TO_METERS;
+			transformStamped.transform.translation.y = (-204.0 * INCHES_TO_METERS) - (6.0 * INCHES_TO_METERS) - ((i * 12.0) * INCHES_TO_METERS);
+			transformStamped.transform.translation.z = 0.0;
+
+			tf2::Quaternion q;
+			q.setRPY(0,0,0 * DEGREES_TO_RADIANS);
+			transformStamped.transform.rotation.x = q.x();
+			transformStamped.transform.rotation.y = q.y();
+			transformStamped.transform.rotation.z = q.z();
+			transformStamped.transform.rotation.w = q.w();
+
+			tfBroadcaster->sendTransform(transformStamped);
+		}
 	}
 }
 
@@ -1108,7 +1141,7 @@ void render_balls()
 		color.b = j == 0 ? 0 : 1;
 		color.a = 1.0;
 
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			std::stringstream ss;
 			ss << prefix << "ball_" << i + 1;
@@ -1118,7 +1151,7 @@ void render_balls()
 
 			ball.header.stamp = ros::Time::now();
 			ball.ns = "balls";;
-			ball.id = (j * 7) + i;
+			ball.id = (j * 10) + i;
 			ball.type = visualization_msgs::Marker::SPHERE;
 			ball.action = visualization_msgs::Marker::ADD;
 
@@ -1229,6 +1262,7 @@ void publisher_loop(void)
 		publish_hub_ball_links(false);
 		publish_terminal_ball_link();
 		publish_cargo_line();
+		publish_cargo_line_ball_links();
 		render_balls();
 
 		publish_hangar_objects();
