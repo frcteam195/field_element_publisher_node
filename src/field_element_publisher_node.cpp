@@ -1007,6 +1007,33 @@ void publish_terminal_ball_link()
 	}
 }
 
+void publish_auto_1_link()
+{
+	for (int i = 0; i < 2; i ++)
+	{
+		bool is_red = i == 0;
+
+		geometry_msgs::TransformStamped transformStamped;
+
+		transformStamped.header.stamp = ros::Time::now();
+		transformStamped.header.frame_id = is_red ? "red_link" : "blue_link";
+		transformStamped.child_frame_id = is_red ? "auto_1_red_link" : "auto_1_blue_link";
+
+		transformStamped.transform.translation.x = 260 * INCHES_TO_METERS;
+		transformStamped.transform.translation.y = -97.5 * INCHES_TO_METERS;
+		transformStamped.transform.translation.z = 0.0;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,(90 + 33 + 20) * DEGREES_TO_RADIANS);
+		transformStamped.transform.rotation.x = q.x();
+		transformStamped.transform.rotation.y = q.y();
+		transformStamped.transform.rotation.z = q.z();
+		transformStamped.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(transformStamped);
+	}
+}
+
 void publish_cargo_line_ball_links()
 {
 	for (int j = 0; j < 2; j ++)
@@ -1267,6 +1294,7 @@ void publisher_loop(void)
 		publish_terminal_ball_link();
 		publish_cargo_line();
 		publish_cargo_line_ball_links();
+		publish_auto_1_link();
 		render_balls();
 
 		publish_hangar_objects();
