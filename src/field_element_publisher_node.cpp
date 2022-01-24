@@ -976,6 +976,33 @@ void publish_hangar_connector(void)
 	vis_pub.publish(hangar);
 }
 
+void publish_terminal_ball_link()
+{
+	for (int i = 0; i < 2; i ++)
+	{
+		bool is_red = i == 0;
+
+		geometry_msgs::TransformStamped transformStamped;
+
+		transformStamped.header.stamp = ros::Time::now();
+		transformStamped.header.frame_id = is_red ? "red_terminal_link" : "blue_terminal_link";
+		transformStamped.child_frame_id = is_red ? "blue_ball_7" : "red_ball_7";
+
+		transformStamped.transform.translation.x = 10.43 * INCHES_TO_METERS;
+		transformStamped.transform.translation.y = 0;
+		transformStamped.transform.translation.z = 0.0;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,0 * DEGREES_TO_RADIANS);
+		transformStamped.transform.rotation.x = q.x();
+		transformStamped.transform.rotation.y = q.y();
+		transformStamped.transform.rotation.z = q.z();
+		transformStamped.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(transformStamped);
+	}
+}
+
 void publish_hub_ball_links(bool is_red)
 {
 	geometry_msgs::TransformStamped transformStamped;
@@ -1081,7 +1108,7 @@ void render_balls()
 		color.b = j == 0 ? 0 : 1;
 		color.a = 1.0;
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			std::stringstream ss;
 			ss << prefix << "ball_" << i + 1;
@@ -1091,7 +1118,7 @@ void render_balls()
 
 			ball.header.stamp = ros::Time::now();
 			ball.ns = "balls";;
-			ball.id = (j * 6) + i;
+			ball.id = (j * 7) + i;
 			ball.type = visualization_msgs::Marker::SPHERE;
 			ball.action = visualization_msgs::Marker::ADD;
 
@@ -1115,6 +1142,53 @@ void render_balls()
 
 			vis_pub.publish(ball);
 		}
+	}
+}
+
+void publish_cargo_line()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		bool is_red = i == 0;
+
+		visualization_msgs::Marker center_line;
+		center_line.header.stamp = ros::Time::now();
+		center_line.header.frame_id = is_red ? "red_link" : "blue_link";
+
+		center_line.type = visualization_msgs::Marker::LINE_STRIP;
+		center_line.action = visualization_msgs::Marker::ADD;
+		center_line.id = 7 + i;
+		center_line.ns = "FieldWall";
+		center_line.color.r = 0;
+		center_line.color.g = 0;
+		center_line.color.b = 0;
+		center_line.color.a = 1;
+		center_line.scale.x = .03;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,0);
+
+		center_line.pose.orientation.x = q.x();
+		center_line.pose.orientation.y = q.y();
+		center_line.pose.orientation.z = q.z();
+		center_line.pose.orientation.w = q.w();
+
+		center_line.pose.position.x = 0;
+		center_line.pose.position.y = 0;
+		center_line.pose.position.z = 0;
+
+		geometry_msgs::Point field_point;
+		field_point.x = 12 * INCHES_TO_METERS;
+		field_point.y = -204 * INCHES_TO_METERS;
+		field_point.z = 0;
+		center_line.points.push_back(field_point);
+
+		field_point.x = 12 * INCHES_TO_METERS;
+		field_point.y = (-204 - 36) * INCHES_TO_METERS;
+		field_point.z = 0;
+		center_line.points.push_back(field_point);
+
+		vis_pub.publish(center_line);
 	}
 }
 
@@ -1153,6 +1227,8 @@ void publisher_loop(void)
 		publish_terminal_cube(false);
 		publish_hub_ball_links(true);
 		publish_hub_ball_links(false);
+		publish_terminal_ball_link();
+		publish_cargo_line();
 		render_balls();
 
 		publish_hangar_objects();
