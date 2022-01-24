@@ -164,56 +164,61 @@ void publish_hub_full_height (void)
 	tfBroadcaster->sendTransform(transformStamped);
 }
 
-void create_player_station(int base_id, std::string base_link)
+void create_player_station()
 {
-	visualization_msgs::Marker player_station;
-	player_station.header.stamp = ros::Time::now();
-	player_station.header.frame_id = base_link;
+	for (int i = 0; i < 2; i ++)
+	{
+		bool is_red = i == 0;
 
-	player_station.type = visualization_msgs::Marker::LINE_STRIP;
-	player_station.action = visualization_msgs::Marker::ADD;
-	player_station.id = base_id;
-	player_station.ns = "FieldWall";
-	player_station.color.r = 1;
-	player_station.color.g = 1;
-	player_station.color.b = 1;
-	player_station.color.a = 1;
-	player_station.scale.x = .03;
+		visualization_msgs::Marker player_station;
+		player_station.header.stamp = ros::Time::now();
+		player_station.header.frame_id = is_red ? "red_link" : "blue_link";
 
-	tf2::Quaternion q;
-	q.setRPY(0,0,0);
+		player_station.type = visualization_msgs::Marker::LINE_STRIP;
+		player_station.action = visualization_msgs::Marker::ADD;
+		player_station.id = 2 + i;
+		player_station.ns = "FieldWall";
+		player_station.color.r = is_red ? 1 : 0;
+		player_station.color.g = 0;
+		player_station.color.b = is_red ? 0 : 1;
+		player_station.color.a = 1;
+		player_station.scale.x = .03;
 
-	player_station.pose.orientation.x = q.x();
-	player_station.pose.orientation.y = q.y();
-	player_station.pose.orientation.z = q.z();
-	player_station.pose.orientation.w = q.w();
+		tf2::Quaternion q;
+		q.setRPY(0,0,0);
 
-	player_station.pose.position.x = 0;
-	player_station.pose.position.y = 0;
-	player_station.pose.position.z = 0;
+		player_station.pose.orientation.x = q.x();
+		player_station.pose.orientation.y = q.y();
+		player_station.pose.orientation.z = q.z();
+		player_station.pose.orientation.w = q.w();
 
-	geometry_msgs::Point field_point;
-	field_point.x = 0;
-	field_point.y = 0;
-	field_point.z = 0;
-	player_station.points.push_back(field_point);
+		player_station.pose.position.x = 0;
+		player_station.pose.position.y = 0;
+		player_station.pose.position.z = 0;
 
-	field_point.x = 0;
-	field_point.y = 0;
-	field_point.z = 77.63 * INCHES_TO_METERS;
-	player_station.points.push_back(field_point);
+		geometry_msgs::Point field_point;
+		field_point.x = 0;
+		field_point.y = 0;
+		field_point.z = 0;
+		player_station.points.push_back(field_point);
 
-	field_point.x = 0;
-	field_point.y = -249.64 * INCHES_TO_METERS;
-	field_point.z = 77.63 * INCHES_TO_METERS;
-	player_station.points.push_back(field_point);
+		field_point.x = 0;
+		field_point.y = 0;
+		field_point.z = 77.63 * INCHES_TO_METERS;
+		player_station.points.push_back(field_point);
 
-	field_point.x = 0;
-	field_point.y = -249.64 * INCHES_TO_METERS;
-	field_point.z = 0;
-	player_station.points.push_back(field_point);
+		field_point.x = 0;
+		field_point.y = -249.64 * INCHES_TO_METERS;
+		field_point.z = 77.63 * INCHES_TO_METERS;
+		player_station.points.push_back(field_point);
 
-	vis_pub.publish(player_station);
+		field_point.x = 0;
+		field_point.y = -249.64 * INCHES_TO_METERS;
+		field_point.z = 0;
+		player_station.points.push_back(field_point);
+
+		vis_pub.publish(player_station);
+	}
 }
 
 void publish_field_perimeter(void)
@@ -344,8 +349,7 @@ void publish_field_perimeter(void)
 
 	vis_pub.publish(field_perimeter2);
 
-	create_player_station(2, "red_link");
-	create_player_station(3, "blue_link");
+	create_player_station();
 }
 
 void publish_field_centerline()
