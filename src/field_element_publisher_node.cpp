@@ -850,13 +850,13 @@ void publish_terminal_cube(bool is_red)
 	vis_pub.publish(terminal);
 }
 
-void publish_hangar_link (void)
+void publish_red_hangar_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
 	transformStamped.header.stamp = ros::Time::now();
 	transformStamped.header.frame_id = "red_link";
-	transformStamped.child_frame_id = "hangar_link";
+	transformStamped.child_frame_id = "red_hangar_link";
 
 	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS;
 	transformStamped.transform.translation.y = (-9.020833 / 2.0) * FEET_TO_METERS;
@@ -872,10 +872,10 @@ void publish_hangar_link (void)
 	tfBroadcaster->sendTransform(transformStamped);
 }
 
-void publish_one_pillar(int a, int b, int p)
+void publish_one_pillar_red(int a, int b, int p)
 {
 	visualization_msgs::Marker hangar;
-	hangar.header.frame_id = "hangar_link";
+	hangar.header.frame_id = "red_hangar_link";
 	hangar.header.stamp = ros::Time::now();
 	hangar.ns = "Hangar";;
 	hangar.id = p;
@@ -906,16 +906,16 @@ void publish_one_pillar(int a, int b, int p)
 	vis_pub.publish(hangar);
 }
 
-void publish_hangar_pillars(void)
+void publish_hangar_pillars_red(void)
 {
 
-	publish_one_pillar(-4.5625, -4.09375, 0);
-	publish_one_pillar(-4.5625, 4.09375, 1);
-	publish_one_pillar(4.5625, -4.09375, 2);
-	publish_one_pillar(4.5625, 4.09375, 3);
+	publish_one_pillar_red(-4.5625, -4.09375, 0);
+	publish_one_pillar_red(-4.5625, 4.09375, 1);
+	publish_one_pillar_red(4.5625, -4.09375, 2);
+	publish_one_pillar_red(4.5625, 4.09375, 3);
 
 	visualization_msgs::Marker hangar;
-	hangar.header.frame_id = "hangar_link";
+	hangar.header.frame_id = "red_hangar_link";
 	hangar.header.stamp = ros::Time::now();
 	hangar.ns = "Hangar";;
 	hangar.id = 4;
@@ -946,10 +946,10 @@ void publish_hangar_pillars(void)
 	vis_pub.publish(hangar);
 }
 
-void publish_hangar_connector(void)
+void publish_hangar_connector_red(void)
 {
 	visualization_msgs::Marker hangar;
-	hangar.header.frame_id = "hangar_link";
+	hangar.header.frame_id = "red_hangar_link";
 	hangar.header.stamp = ros::Time::now();
 	hangar.ns = "hangar";;
 	hangar.id = 5;
@@ -979,6 +979,222 @@ void publish_hangar_connector(void)
 
 	vis_pub.publish(hangar);
 }
+
+void publish_one_rung_red(int x, int z, int i)
+{
+	visualization_msgs::Marker rung;
+	rung.header.frame_id = "red_hangar_link";
+	rung.header.stamp = ros::Time::now();
+	rung.ns = "rung";
+	rung.id = i;
+	rung.type = visualization_msgs::Marker::CYLINDER;
+	rung.action = visualization_msgs::Marker::ADD;
+
+	rung.pose.position.x = x * INCHES_TO_METERS;
+	rung.pose.position.y = 0;
+	rung.pose.position.z = z * INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(90 * DEGREES_TO_RADIANS, 0, 0);
+
+	rung.pose.orientation.x = q.x();
+	rung.pose.orientation.y = q.y();
+	rung.pose.orientation.z = q.z();
+	rung.pose.orientation.w = q.w();
+
+	rung.scale.x = 1.66 * INCHES_TO_METERS;
+	rung.scale.y = 1.66 * INCHES_TO_METERS;
+	rung.scale.z = 7 * FEET_TO_METERS;
+
+	rung.color.r = 0.7;
+	rung.color.g = 0.7;
+	rung.color.b = 0.7;
+	rung.color.a = 1.0;
+
+	vis_pub.publish(rung);
+}
+
+void publish_rungs_red(void) {
+	publish_one_rung_red(60.41, 48, 1);
+	publish_one_rung_red(20.75, 60, 2);
+	publish_one_rung_red(-3.27, 75.33, 3);
+	publish_one_rung_red(-27.25, 90.67, 4);
+}
+
+
+
+
+void publish_blue_hangar_link (void)
+{
+	geometry_msgs::TransformStamped transformStamped;
+
+	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.frame_id = "blue_link";
+	transformStamped.child_frame_id = "blue_hangar_link";
+
+	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.y = (-9.020833 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.z = 0.0;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0 * DEGREES_TO_RADIANS);
+	transformStamped.transform.rotation.x = q.x();
+	transformStamped.transform.rotation.y = q.y();
+	transformStamped.transform.rotation.z = q.z();
+	transformStamped.transform.rotation.w = q.w();
+
+	tfBroadcaster->sendTransform(transformStamped);
+}
+
+void publish_one_pillar_blue(int a, int b, int p)
+{
+	visualization_msgs::Marker hangar;
+	hangar.header.frame_id = "blue_hangar_link";
+	hangar.header.stamp = ros::Time::now();
+	hangar.ns = "Hangar";;
+	hangar.id = p;
+	hangar.type = visualization_msgs::Marker::CUBE;
+	hangar.action = visualization_msgs::Marker::ADD;
+
+	hangar.pose.position.x = a * FEET_TO_METERS;
+	hangar.pose.position.y = b * FEET_TO_METERS;
+	hangar.pose.position.z = 6.1667/2 * FEET_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	hangar.pose.orientation.x = q.x();
+	hangar.pose.orientation.y = q.y();
+	hangar.pose.orientation.z = q.z();
+	hangar.pose.orientation.w = q.w();
+
+	hangar.scale.x = 1 * FEET_TO_METERS;
+	hangar.scale.y = 1 * FEET_TO_METERS;
+	hangar.scale.z = 6.1667 * FEET_TO_METERS;
+
+	hangar.color.r = 0.7;
+	hangar.color.g = 0.7;
+	hangar.color.b = 0.7;
+	hangar.color.a = 1.0;
+
+	vis_pub.publish(hangar);
+}
+
+void publish_hangar_pillars_blue(void)
+{
+
+	publish_one_pillar_blue(-4.5625, -4.09375, 10);
+	publish_one_pillar_blue(-4.5625, 4.09375, 6);
+	publish_one_pillar_blue(4.5625, -4.09375, 7);
+	publish_one_pillar_blue(4.5625, 4.09375, 9);
+
+	visualization_msgs::Marker hangar;
+	hangar.header.frame_id = "blue_hangar_link";
+	hangar.header.stamp = ros::Time::now();
+	hangar.ns = "Hangar";;
+	hangar.id = 8;
+	hangar.type = visualization_msgs::Marker::CUBE;
+	hangar.action = visualization_msgs::Marker::ADD;
+
+	hangar.pose.position.x = 0;
+	hangar.pose.position.y = 4.005215* FEET_TO_METERS;
+	hangar.pose.position.z = 1.725;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	hangar.pose.orientation.x = q.x();
+	hangar.pose.orientation.y = q.y();
+	hangar.pose.orientation.z = q.z();
+	hangar.pose.orientation.w = q.w();
+
+	hangar.scale.x = 9.125 * FEET_TO_METERS;
+	hangar.scale.y = 1 * FEET_TO_METERS;
+	hangar.scale.z = 1 * FEET_TO_METERS;
+
+	hangar.color.r = 0.7;
+	hangar.color.g = 0.7;
+	hangar.color.b = 0.7;
+	hangar.color.a = 1.0;
+
+	vis_pub.publish(hangar);
+}
+
+void publish_hangar_connector_blue(void)
+{
+	visualization_msgs::Marker hangar;
+	hangar.header.frame_id = "blue_hangar_link";
+	hangar.header.stamp = ros::Time::now();
+	hangar.ns = "hangar";;
+	hangar.id = 7;
+	hangar.type = visualization_msgs::Marker::CUBE;
+	hangar.action = visualization_msgs::Marker::ADD;
+
+	hangar.pose.position.x = 0;
+	hangar.pose.position.y = -4.005215* FEET_TO_METERS;
+	hangar.pose.position.z = 1.725;
+
+	tf2::Quaternion q;
+	q.setRPY(0,0,0);
+
+	hangar.pose.orientation.x = q.x();
+	hangar.pose.orientation.y = q.y();
+	hangar.pose.orientation.z = q.z();
+	hangar.pose.orientation.w = q.w();
+
+	hangar.scale.x = 9.125 * FEET_TO_METERS;
+	hangar.scale.y = 1 * FEET_TO_METERS;
+	hangar.scale.z = 1 * FEET_TO_METERS;
+
+	hangar.color.r = 0.7;
+	hangar.color.g = 0.7;
+	hangar.color.b = 0.7;
+	hangar.color.a = 1.0;
+
+	vis_pub.publish(hangar);
+}
+
+void publish_one_rung_blue(int x, int z, int i)
+{
+	visualization_msgs::Marker rung;
+	rung.header.frame_id = "blue_hangar_link";
+	rung.header.stamp = ros::Time::now();
+	rung.ns = "rung";
+	rung.id = i;
+	rung.type = visualization_msgs::Marker::CYLINDER;
+	rung.action = visualization_msgs::Marker::ADD;
+
+	rung.pose.position.x = x * INCHES_TO_METERS;
+	rung.pose.position.y = 0;
+	rung.pose.position.z = z * INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(90 * DEGREES_TO_RADIANS, 0, 0);
+
+	rung.pose.orientation.x = q.x();
+	rung.pose.orientation.y = q.y();
+	rung.pose.orientation.z = q.z();
+	rung.pose.orientation.w = q.w();
+
+	rung.scale.x = 1.66 * INCHES_TO_METERS;
+	rung.scale.y = 1.66 * INCHES_TO_METERS;
+	rung.scale.z = 7 * FEET_TO_METERS;
+
+	rung.color.r = 0.7;
+	rung.color.g = 0.7;
+	rung.color.b = 0.7;
+	rung.color.a = 1.0;
+
+	vis_pub.publish(rung);
+}
+
+void publish_rungs_blue(void) {
+	publish_one_rung_blue(60.41, 48, 5);
+	publish_one_rung_blue(20.75, 60, 6);
+	publish_one_rung_blue(-3.27, 75.33, 7);
+	publish_one_rung_blue(-27.25, 90.67, 8);
+}
+
 
 void publish_terminal_ball_link()
 {
@@ -1258,9 +1474,15 @@ void publish_cargo_line()
 
 void publish_hangar_objects(void)
 {
-	publish_hangar_link();
-	publish_hangar_pillars();
-	publish_hangar_connector();
+	publish_red_hangar_link();
+	publish_hangar_pillars_red();
+	publish_hangar_connector_red();
+	publish_rungs_red();
+
+	publish_blue_hangar_link();
+	publish_hangar_pillars_blue();
+	publish_hangar_connector_blue();
+	publish_rungs_blue();
 }
 
 void publish_hub_objects(void)
