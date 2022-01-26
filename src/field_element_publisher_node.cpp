@@ -9,6 +9,8 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#include <geometry_msgs/TransformStamped.h>
+#include <visualization_msgs/Marker.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/LinearMath/Quaternion.h>
@@ -858,8 +860,8 @@ void publish_red_hangar_link (void)
 	transformStamped.header.frame_id = "red_link";
 	transformStamped.child_frame_id = "red_hangar_link";
 
-	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS;
-	transformStamped.transform.translation.y = (-9.020833 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS; 
+	transformStamped.transform.translation.y = (-10.020833 / 2.0) * FEET_TO_METERS;
 	transformStamped.transform.translation.z = 0.0;
 
 	tf2::Quaternion q;
@@ -1033,7 +1035,7 @@ void publish_blue_hangar_link (void)
 	transformStamped.child_frame_id = "blue_hangar_link";
 
 	transformStamped.transform.translation.x = (10.0625 / 2.0) * FEET_TO_METERS;
-	transformStamped.transform.translation.y = (-9.020833 / 2.0) * FEET_TO_METERS;
+	transformStamped.transform.translation.y = (-10.020833 / 2.0) * FEET_TO_METERS;
 	transformStamped.transform.translation.z = 0.0;
 
 	tf2::Quaternion q;
