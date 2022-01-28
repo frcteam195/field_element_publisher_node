@@ -1190,6 +1190,110 @@ void publish_one_rung_blue(int x, int z, int i)
 	vis_pub.publish(rung);
 }
 
+void publish_robot_box(){
+	visualization_msgs::Marker rung;
+	rung.header.frame_id = "base_link";
+	rung.header.stamp = ros::Time::now();
+	rung.ns = "robot";
+	rung.id = 0;
+	rung.type = visualization_msgs::Marker::CUBE;
+	rung.action = visualization_msgs::Marker::ADD;
+
+	rung.pose.position.x = 0;
+	rung.pose.position.y = 0;
+	rung.pose.position.z = 2 * INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0 * DEGREES_TO_RADIANS, 0, 0);
+
+	rung.pose.orientation.x = q.x();
+	rung.pose.orientation.y = q.y();
+	rung.pose.orientation.z = q.z();
+	rung.pose.orientation.w = q.w();
+
+	rung.scale.x = 36 * INCHES_TO_METERS;
+	rung.scale.y = 32 * INCHES_TO_METERS;
+	rung.scale.z = 4 * INCHES_TO_METERS;
+
+	rung.color.r = 0.7;
+	rung.color.g = 0.7;
+	rung.color.b = 0.7;
+	rung.color.a = 1.0;
+
+	vis_pub.publish(rung);
+}
+
+void publish_robot_topbox(){
+	visualization_msgs::Marker rung;
+	rung.header.frame_id = "base_link";
+	rung.header.stamp = ros::Time::now();
+	rung.ns = "robot";
+	rung.id = 1;
+	rung.type = visualization_msgs::Marker::CUBE;
+	rung.action = visualization_msgs::Marker::ADD;
+
+	rung.pose.position.x = 0;
+	rung.pose.position.y = 0;
+	rung.pose.position.z = 7* INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0 * DEGREES_TO_RADIANS, 0, 0);
+
+	rung.pose.orientation.x = q.x();
+	rung.pose.orientation.y = q.y();
+	rung.pose.orientation.z = q.z();
+	rung.pose.orientation.w = q.w();
+
+	rung.scale.x = 31 * INCHES_TO_METERS;
+	rung.scale.y = 24 * INCHES_TO_METERS;
+	rung.scale.z = 14 * INCHES_TO_METERS;
+
+	rung.color.r = 0.7;
+	rung.color.g = 0.7;
+	rung.color.b = 0.7;
+	rung.color.a = 1.0;
+
+	vis_pub.publish(rung);
+}
+
+void publish_robot_turret(){
+	visualization_msgs::Marker rung;
+	rung.header.frame_id = "base_link";
+	rung.header.stamp = ros::Time::now();
+	rung.ns = "robot";
+	rung.id = 2;
+	rung.type = visualization_msgs::Marker::CUBE;
+	rung.action = visualization_msgs::Marker::ADD;
+
+	rung.pose.position.x = 0;
+	rung.pose.position.y = 0;
+	rung.pose.position.z = 12.5* INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0 * DEGREES_TO_RADIANS, 0, 0);
+
+	rung.pose.orientation.x = q.x();
+	rung.pose.orientation.y = q.y();
+	rung.pose.orientation.z = q.z();
+	rung.pose.orientation.w = q.w();
+
+	rung.scale.x = 18* INCHES_TO_METERS;
+	rung.scale.y = 13 * INCHES_TO_METERS;
+	rung.scale.z = 25* INCHES_TO_METERS;
+
+	rung.color.r = 0.7;
+	rung.color.g = 0.7;
+	rung.color.b = 0.7;
+	rung.color.a = 1.0;
+
+	vis_pub.publish(rung);
+}
+
+
+
+
+
+
 void publish_rungs_blue(void) {
 	publish_one_rung_blue(60.41, 48, 5);
 	publish_one_rung_blue(20.75, 60, 6);
@@ -1520,7 +1624,10 @@ void publisher_loop(void)
 		publish_cargo_line_ball_links();
 		publish_auto_1_link();
 		render_balls();
+		publish_robot_box();
+		publish_robot_topbox();
 
+		publish_robot_turret();
 		publish_hangar_objects();
 
 		publish_hub_objects();
