@@ -1258,7 +1258,7 @@ void publish_robot_topbox(){
 
 void publish_robot_turret(){
 	visualization_msgs::Marker rung;
-	rung.header.frame_id = "base_link";
+	rung.header.frame_id = "turret_link";
 	rung.header.stamp = ros::Time::now();
 	rung.ns = "robot";
 	rung.id = 2;
@@ -1267,7 +1267,7 @@ void publish_robot_turret(){
 
 	rung.pose.position.x = 0;
 	rung.pose.position.y = 0;
-	rung.pose.position.z = 12.5* INCHES_TO_METERS;
+	rung.pose.position.z = 5 * INCHES_TO_METERS;
 
 	tf2::Quaternion q;
 	q.setRPY(0 * DEGREES_TO_RADIANS, 0, 0);
@@ -1279,7 +1279,7 @@ void publish_robot_turret(){
 
 	rung.scale.x = 18* INCHES_TO_METERS;
 	rung.scale.y = 13 * INCHES_TO_METERS;
-	rung.scale.z = 25* INCHES_TO_METERS;
+	rung.scale.z = 10* INCHES_TO_METERS;
 
 	rung.color.r = 0.7;
 	rung.color.g = 0.7;
