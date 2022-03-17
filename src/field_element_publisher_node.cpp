@@ -1190,6 +1190,41 @@ void publish_one_rung_blue(int x, int z, int i)
 	vis_pub.publish(rung);
 }
 
+void publish_robot_bumper()
+{
+
+	visualization_msgs::Marker bumper;
+	bumper.header.frame_id = "base_link";
+	bumper.header.stamp = ros::Time::now();
+	bumper.ns = "robot";
+	bumper.id = 3;
+	bumper.type = visualization_msgs::Marker::CUBE;
+	bumper.action = visualization_msgs::Marker::ADD;
+
+	bumper.pose.position.x = 0;
+	bumper.pose.position.y = 0;
+	bumper.pose.position.z = 2 * INCHES_TO_METERS;
+
+	tf2::Quaternion q;
+	q.setRPY(0 * DEGREES_TO_RADIANS, 0, 0);
+
+	bumper.pose.orientation.x = q.x();
+	bumper.pose.orientation.y = q.y();
+	bumper.pose.orientation.z = q.z();
+	bumper.pose.orientation.w = q.w();
+
+	bumper.scale.x = 38 * INCHES_TO_METERS;
+	bumper.scale.y = 34 * INCHES_TO_METERS;
+	bumper.scale.z = 3.5 * INCHES_TO_METERS;
+
+	bumper.color.r = 0.7;
+	bumper.color.g = 0.0;
+	bumper.color.b = 0.7;
+	bumper.color.a = 1.0;
+
+	vis_pub.publish(bumper);
+}
+
 void publish_robot_box(){
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "base_link";
@@ -1221,6 +1256,7 @@ void publish_robot_box(){
 	rung.color.a = 1.0;
 
 	vis_pub.publish(rung);
+	publish_robot_bumper();
 }
 
 void publish_robot_topbox(){
