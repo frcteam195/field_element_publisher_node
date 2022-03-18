@@ -42,7 +42,7 @@ void publish_red_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "map";
 	transformStamped.child_frame_id = "red_link";
 
@@ -64,7 +64,7 @@ void publish_blue_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "map";
 	transformStamped.child_frame_id = "blue_link";
 
@@ -86,7 +86,7 @@ void publish_hub_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "red_link";
 	transformStamped.child_frame_id = "hub_link";
 
@@ -148,7 +148,7 @@ void publish_hub_full_height (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "hub_link";
 	transformStamped.child_frame_id = "hub_full_height";
 
@@ -173,7 +173,7 @@ void create_player_station()
 		bool is_red = i == 0;
 
 		visualization_msgs::Marker player_station;
-		player_station.header.stamp = ros::Time::now();
+		player_station.header.stamp = ros::Time::now() + ros::Duration(5);
 		player_station.header.frame_id = is_red ? "red_link" : "blue_link";
 
 		player_station.type = visualization_msgs::Marker::LINE_STRIP;
@@ -226,7 +226,7 @@ void create_player_station()
 void publish_field_perimeter(void)
 {
 	visualization_msgs::Marker field_perimeter;
-	field_perimeter.header.stamp = ros::Time::now();
+	field_perimeter.header.stamp = ros::Time::now() + ros::Duration(5);
 	field_perimeter.header.frame_id = "red_link";
 
 	field_perimeter.type = visualization_msgs::Marker::LINE_STRIP;
@@ -290,7 +290,7 @@ void publish_field_perimeter(void)
 	vis_pub.publish(field_perimeter);
 
 	visualization_msgs::Marker field_perimeter2;
-	field_perimeter2.header.stamp = ros::Time::now();
+	field_perimeter2.header.stamp = ros::Time::now() + ros::Duration(5);
 	field_perimeter2.header.frame_id = "red_link";
 
 	field_perimeter2.type = visualization_msgs::Marker::LINE_STRIP;
@@ -358,7 +358,7 @@ void publish_field_centerline()
 {
 
 	visualization_msgs::Marker center_line;
-	center_line.header.stamp = ros::Time::now();
+	center_line.header.stamp = ros::Time::now() + ros::Duration(5);
 	center_line.header.frame_id = "hub_link";
 
 	center_line.type = visualization_msgs::Marker::LINE_STRIP;
@@ -403,7 +403,7 @@ void publish_hub_cylinder(void)
 {
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
-	hub.header.stamp = ros::Time::now();
+	hub.header.stamp = ros::Time::now() + ros::Duration(5);
 	hub.ns = "Hub";;
 	hub.id = 0;
 	hub.type = visualization_msgs::Marker::CYLINDER;
@@ -437,7 +437,7 @@ void publish_hub_base(void)
 {
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
-	hub.header.stamp = ros::Time::now();
+	hub.header.stamp = ros::Time::now() + ros::Duration(5);
 	hub.ns = "Hub";
 	hub.id = 5;
 	hub.type = visualization_msgs::Marker::CUBE;
@@ -471,7 +471,7 @@ void publish_hub_lower_cylinder(void)
 {
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
-	hub.header.stamp = ros::Time::now();
+	hub.header.stamp = ros::Time::now() + ros::Duration(5);
 	hub.ns = "Hub";
 	hub.id = 6;
 	hub.type = visualization_msgs::Marker::CYLINDER;
@@ -505,7 +505,7 @@ void publish_hub_upper_return(int base_id, float angle)
 {
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
-	hub.header.stamp = ros::Time::now();
+	hub.header.stamp = ros::Time::now() + ros::Duration(5);
 	hub.ns = "Hub";
 	hub.id = base_id + 7;
 	hub.type = visualization_msgs::Marker::CUBE;
@@ -577,7 +577,7 @@ void publish_hub_lower_return(int base_id, float angle)
 {
 	visualization_msgs::Marker hub;
 	hub.header.frame_id = "hub_link";
-	hub.header.stamp = ros::Time::now();
+	hub.header.stamp = ros::Time::now() + ros::Duration(5);
 	hub.ns = "Hub";
 	hub.id = base_id + 11;
 	hub.type = visualization_msgs::Marker::CUBE;
@@ -649,7 +649,7 @@ void publish_hub_lower_returns(void)
 void publish_tarmac_lines(int base_id, std::string base_link, bool color_is_red)
 {
 	visualization_msgs::Marker center_line;
-	center_line.header.stamp = ros::Time::now();
+	center_line.header.stamp = ros::Time::now() + ros::Duration(5);
 	center_line.header.frame_id = base_link;
 
 	center_line.type = visualization_msgs::Marker::LINE_STRIP;
@@ -717,7 +717,7 @@ void publish_tarmac_links()
 	{
 		geometry_msgs::TransformStamped transformStamped;
 
-		transformStamped.header.stamp = ros::Time::now();
+		transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 		transformStamped.header.frame_id = "hub_link";
 
 		float angle;
@@ -793,7 +793,7 @@ void publish_terminal_link(bool is_red)
 		transformStamped.child_frame_id = "blue_terminal_link";
 	}
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 
 	transformStamped.transform.translation.x = (69 * INCHES_TO_METERS) / 2.0;
 	transformStamped.transform.translation.y = -((((27.0 * 12.0) - 252.0) / 2.0) + 252.0) * INCHES_TO_METERS;
@@ -822,7 +822,7 @@ void publish_terminal_cube(bool is_red)
 		terminal.header.frame_id = "blue_terminal_link";
 	}
 
-	terminal.header.stamp = ros::Time::now();
+	terminal.header.stamp = ros::Time::now() + ros::Duration(5);
 	terminal.ns = "terminals";
 	terminal.id = is_red ? 0 : 1;
 	terminal.type = visualization_msgs::Marker::CUBE;
@@ -856,7 +856,7 @@ void publish_red_hangar_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "red_link";
 	transformStamped.child_frame_id = "red_hangar_link";
 
@@ -878,7 +878,7 @@ void publish_one_pillar_red(int a, int b, int p)
 {
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "red_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "Hangar";;
 	hangar.id = p;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -918,7 +918,7 @@ void publish_hangar_pillars_red(void)
 
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "red_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "Hangar";;
 	hangar.id = 4;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -952,7 +952,7 @@ void publish_hangar_connector_red(void)
 {
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "red_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "hangar";;
 	hangar.id = 5;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -986,7 +986,7 @@ void publish_one_rung_red(int x, int z, int i)
 {
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "red_hangar_link";
-	rung.header.stamp = ros::Time::now();
+	rung.header.stamp = ros::Time::now() + ros::Duration(5);
 	rung.ns = "rung";
 	rung.id = i;
 	rung.type = visualization_msgs::Marker::CYLINDER;
@@ -1030,7 +1030,7 @@ void publish_blue_hangar_link (void)
 {
 	geometry_msgs::TransformStamped transformStamped;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 	transformStamped.header.frame_id = "blue_link";
 	transformStamped.child_frame_id = "blue_hangar_link";
 
@@ -1052,7 +1052,7 @@ void publish_one_pillar_blue(int a, int b, int p)
 {
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "blue_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "Hangar";;
 	hangar.id = p;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -1092,7 +1092,7 @@ void publish_hangar_pillars_blue(void)
 
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "blue_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "Hangar";;
 	hangar.id = 8;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -1126,7 +1126,7 @@ void publish_hangar_connector_blue(void)
 {
 	visualization_msgs::Marker hangar;
 	hangar.header.frame_id = "blue_hangar_link";
-	hangar.header.stamp = ros::Time::now();
+	hangar.header.stamp = ros::Time::now() + ros::Duration(5);
 	hangar.ns = "hangar";;
 	hangar.id = 7;
 	hangar.type = visualization_msgs::Marker::CUBE;
@@ -1160,7 +1160,7 @@ void publish_one_rung_blue(int x, int z, int i)
 {
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "blue_hangar_link";
-	rung.header.stamp = ros::Time::now();
+	rung.header.stamp = ros::Time::now() + ros::Duration(5);
 	rung.ns = "rung";
 	rung.id = i;
 	rung.type = visualization_msgs::Marker::CYLINDER;
@@ -1195,7 +1195,7 @@ void publish_robot_bumper()
 
 	visualization_msgs::Marker bumper;
 	bumper.header.frame_id = "base_link";
-	bumper.header.stamp = ros::Time::now();
+	bumper.header.stamp = ros::Time::now() + ros::Duration(5);
 	bumper.ns = "robot";
 	bumper.id = 3;
 	bumper.type = visualization_msgs::Marker::CUBE;
@@ -1228,7 +1228,7 @@ void publish_robot_bumper()
 void publish_robot_box(){
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "base_link";
-	rung.header.stamp = ros::Time::now();
+	rung.header.stamp = ros::Time::now() + ros::Duration(5);
 	rung.ns = "robot";
 	rung.id = 0;
 	rung.type = visualization_msgs::Marker::CUBE;
@@ -1262,7 +1262,7 @@ void publish_robot_box(){
 void publish_robot_topbox(){
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "base_link";
-	rung.header.stamp = ros::Time::now();
+	rung.header.stamp = ros::Time::now() + ros::Duration(5);
 	rung.ns = "robot";
 	rung.id = 1;
 	rung.type = visualization_msgs::Marker::CUBE;
@@ -1295,7 +1295,7 @@ void publish_robot_topbox(){
 void publish_robot_turret(){
 	visualization_msgs::Marker rung;
 	rung.header.frame_id = "turret_link";
-	rung.header.stamp = ros::Time::now();
+	rung.header.stamp = ros::Time::now() + ros::Duration(5);
 	rung.ns = "robot";
 	rung.id = 2;
 	rung.type = visualization_msgs::Marker::CUBE;
@@ -1346,7 +1346,7 @@ void publish_terminal_ball_link()
 
 		geometry_msgs::TransformStamped transformStamped;
 
-		transformStamped.header.stamp = ros::Time::now();
+		transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 		transformStamped.header.frame_id = is_red ? "red_terminal_link" : "blue_terminal_link";
 		transformStamped.child_frame_id = is_red ? "red_ball_7" : "blue_ball_7";
 
@@ -1373,7 +1373,7 @@ void publish_auto_1_link()
 
 		geometry_msgs::TransformStamped transformStamped;
 
-		transformStamped.header.stamp = ros::Time::now();
+		transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 		transformStamped.header.frame_id = is_red ? "tarmac_red_2_link" : "tarmac_blue_2_link";
 		transformStamped.child_frame_id = is_red ? "auto_1_red_tarmac_link" : "auto_1_blue_tarmac_link";
 
@@ -1392,7 +1392,7 @@ void publish_auto_1_link()
 
 		geometry_msgs::TransformStamped actual_robot;
 
-		actual_robot.header.stamp = ros::Time::now();
+		actual_robot.header.stamp = ros::Time::now() + ros::Duration(5);
 		actual_robot.header.frame_id = is_red ? "auto_1_red_tarmac_link" : "auto_1_blue_tarmac_link";
 		actual_robot.child_frame_id = is_red ? "auto_1_red_link" : "auto_1_blue_link";
 
@@ -1423,7 +1423,7 @@ void publish_cargo_line_ball_links()
 			std::stringstream ss;
 			ss << (is_red ? "red_" : "blue_") << "ball_" << (8 + i);
 
-			transformStamped.header.stamp = ros::Time::now();
+			transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 			transformStamped.header.frame_id = is_red ? "red_link" : "blue_link";
 			transformStamped.child_frame_id = ss.str();
 
@@ -1448,7 +1448,7 @@ void publish_hub_ball_links(bool is_red)
 	geometry_msgs::TransformStamped transformStamped;
 	std::string link_prefix;
 
-	transformStamped.header.stamp = ros::Time::now();
+	transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
 
 	switch (is_red)
 	{
@@ -1526,7 +1526,7 @@ void publish_hub_ball_links(bool is_red)
 		transformStamped.transform.translation.z = 0.0;
 
 		tf2::Quaternion q;
-		q.setRPY(0,0,-angle);
+		q.setRPY(0,0,-24 * DEGREES_TO_RADIANS);
 		transformStamped.transform.rotation.x = q.x();
 		transformStamped.transform.rotation.y = q.y();
 		transformStamped.transform.rotation.z = q.z();
@@ -1556,7 +1556,7 @@ void render_balls()
 			visualization_msgs::Marker ball;
 			ball.header.frame_id = ss.str();
 
-			ball.header.stamp = ros::Time::now();
+			ball.header.stamp = ros::Time::now() + ros::Duration(5);
 			ball.ns = "balls";;
 			ball.id = (j * 10) + i;
 			ball.type = visualization_msgs::Marker::SPHERE;
@@ -1592,7 +1592,7 @@ void publish_cargo_line()
 		bool is_red = i == 0;
 
 		visualization_msgs::Marker center_line;
-		center_line.header.stamp = ros::Time::now();
+		center_line.header.stamp = ros::Time::now() + ros::Duration(5);
 		center_line.header.frame_id = is_red ? "red_link" : "blue_link";
 
 		center_line.type = visualization_msgs::Marker::LINE_STRIP;
@@ -1661,7 +1661,7 @@ void publisher_loop(void)
 {
     while(ros::ok())
     {
-		static ros::Rate rate_control(10);
+		static ros::Rate rate_control(100);
 
 		publish_red_link();
 		publish_blue_link();
