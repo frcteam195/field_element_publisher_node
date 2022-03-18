@@ -1374,21 +1374,39 @@ void publish_auto_1_link()
 		geometry_msgs::TransformStamped transformStamped;
 
 		transformStamped.header.stamp = ros::Time::now();
-		transformStamped.header.frame_id = is_red ? "red_link" : "blue_link";
-		transformStamped.child_frame_id = is_red ? "auto_1_red_link" : "auto_1_blue_link";
+		transformStamped.header.frame_id = is_red ? "tarmac_red_2_link" : "tarmac_blue_2_link";
+		transformStamped.child_frame_id = is_red ? "auto_1_red_tarmac_link" : "auto_1_blue_tarmac_link";
 
-		transformStamped.transform.translation.x = 260 * INCHES_TO_METERS;
-		transformStamped.transform.translation.y = -97.5 * INCHES_TO_METERS;
+		transformStamped.transform.translation.x = 86.96 * INCHES_TO_METERS;
+		transformStamped.transform.translation.y = 0.0;
 		transformStamped.transform.translation.z = 0.0;
 
 		tf2::Quaternion q;
-		q.setRPY(0,0,(90 + 33 + 20) * DEGREES_TO_RADIANS);
+		q.setRPY(0,0,(180 + 22.5) * DEGREES_TO_RADIANS);
 		transformStamped.transform.rotation.x = q.x();
 		transformStamped.transform.rotation.y = q.y();
 		transformStamped.transform.rotation.z = q.z();
 		transformStamped.transform.rotation.w = q.w();
 
 		tfBroadcaster->sendTransform(transformStamped);
+
+		geometry_msgs::TransformStamped actual_robot;
+
+		actual_robot.header.stamp = ros::Time::now();
+		actual_robot.header.frame_id = is_red ? "auto_1_red_tarmac_link" : "auto_1_blue_tarmac_link";
+		actual_robot.child_frame_id = is_red ? "auto_1_red_link" : "auto_1_blue_link";
+
+		actual_robot.transform.translation.x = 19.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.y = -17.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.z = 0.0;
+
+		q.setRPY(0,0,0);
+		actual_robot.transform.rotation.x = q.x();
+		actual_robot.transform.rotation.y = q.y();
+		actual_robot.transform.rotation.z = q.z();
+		actual_robot.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(actual_robot);
 	}
 }
 
