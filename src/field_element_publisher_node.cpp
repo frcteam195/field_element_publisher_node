@@ -1377,7 +1377,7 @@ void publish_auto_1_link()
 		transformStamped.header.frame_id = is_red ? "tarmac_red_2_link" : "tarmac_blue_2_link";
 		transformStamped.child_frame_id = is_red ? "auto_1_red_tarmac_link" : "auto_1_blue_tarmac_link";
 
-		transformStamped.transform.translation.x = 86.96 * INCHES_TO_METERS;
+		transformStamped.transform.translation.x = 84.75 * INCHES_TO_METERS;
 		transformStamped.transform.translation.y = 0.0;
 		transformStamped.transform.translation.z = 0.0;
 
@@ -1409,7 +1409,95 @@ void publish_auto_1_link()
 		tfBroadcaster->sendTransform(actual_robot);
 	}
 }
+void publish_auto_2_link()
+{
+	for (int i = 0; i < 2; i ++)
+	{
+		bool is_red = i == 0;
 
+		geometry_msgs::TransformStamped transformStamped;
+
+		transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
+		transformStamped.header.frame_id = is_red ? "tarmac_red_1_link" : "tarmac_blue_1_link";
+		transformStamped.child_frame_id = is_red ? "auto_2_red_tarmac_link" : "auto_2_blue_tarmac_link";
+
+		transformStamped.transform.translation.x = 84.75 * INCHES_TO_METERS;
+		transformStamped.transform.translation.y = 0.0;
+		transformStamped.transform.translation.z = 0.0;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,(180 - 22.5) * DEGREES_TO_RADIANS);
+		transformStamped.transform.rotation.x = q.x();
+		transformStamped.transform.rotation.y = q.y();
+		transformStamped.transform.rotation.z = q.z();
+		transformStamped.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(transformStamped);
+
+		geometry_msgs::TransformStamped actual_robot;
+
+		actual_robot.header.stamp = ros::Time::now() + ros::Duration(5);
+		actual_robot.header.frame_id = is_red ? "auto_2_red_tarmac_link" : "auto_2_blue_tarmac_link";
+		actual_robot.child_frame_id = is_red ? "auto_2_red_link" : "auto_2_blue_link";
+
+		actual_robot.transform.translation.x = 19.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.y = 17.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.z = 0.0;
+
+		q.setRPY(0,0,0);
+		actual_robot.transform.rotation.x = q.x();
+		actual_robot.transform.rotation.y = q.y();
+		actual_robot.transform.rotation.z = q.z();
+		actual_robot.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(actual_robot);
+	}
+}
+	
+/*void publish_auto_3_link()
+{
+	for (int i = 0; i < 2; i ++)
+	{
+		bool is_red = i == 0;
+
+		geometry_msgs::TransformStamped transformStamped;
+
+		transformStamped.header.stamp = ros::Time::now() + ros::Duration(5);
+		transformStamped.header.frame_id = is_red ? "tarmac_red_1_link" : "tarmac_blue_1_link";
+		transformStamped.child_frame_id = is_red ? "auto_3_red_tarmac_link" : "auto_3_blue_tarmac_link";
+
+		transformStamped.transform.translation.x = 84.75 * INCHES_TO_METERS;
+		transformStamped.transform.translation.y = 0.0;
+		transformStamped.transform.translation.z = 0.0;
+
+		tf2::Quaternion q;
+		q.setRPY(0,0,(180 - 22.5) * DEGREES_TO_RADIANS);
+		transformStamped.transform.rotation.x = q.x();
+		transformStamped.transform.rotation.y = q.y();
+		transformStamped.transform.rotation.z = q.z();
+		transformStamped.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(transformStamped);
+
+		geometry_msgs::TransformStamped actual_robot;
+
+		actual_robot.header.stamp = ros::Time::now() + ros::Duration(5);
+		actual_robot.header.frame_id = is_red ? "auto_2_red_tarmac_link" : "auto_2_blue_tarmac_link";
+		actual_robot.child_frame_id = is_red ? "auto_3_red_link" : "auto_3_blue_link";
+
+		actual_robot.transform.translation.x = 19.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.y = 17.0 * INCHES_TO_METERS;
+		actual_robot.transform.translation.z = 0.0;
+
+		q.setRPY(0,0,0);
+		actual_robot.transform.rotation.x = q.x();
+		actual_robot.transform.rotation.y = q.y();
+		actual_robot.transform.rotation.z = q.z();
+		actual_robot.transform.rotation.w = q.w();
+
+		tfBroadcaster->sendTransform(actual_robot);
+	}
+}*/
 void publish_cargo_line_ball_links()
 {
 	for (int j = 0; j < 2; j ++)
@@ -1677,6 +1765,7 @@ void publisher_loop(void)
 		publish_cargo_line();
 		publish_cargo_line_ball_links();
 		publish_auto_1_link();
+		publish_auto_2_link();
 		render_balls();
 		publish_robot_box();
 		publish_robot_topbox();
