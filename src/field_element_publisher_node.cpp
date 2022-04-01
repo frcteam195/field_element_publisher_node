@@ -18,6 +18,8 @@
 #include <visualization_msgs/Marker.h>
 #pragma GCC diagnostic pop
 
+#include "ck_utilities/CKMath.hpp"
+
 #define FEET_TO_METERS 0.3048
 #define INCHES_TO_METERS 0.0254
 #define DEGREES_TO_RADIANS M_PI / 180.0
@@ -1400,7 +1402,7 @@ void publish_auto_1_link()
 		actual_robot.transform.translation.y = -17.0 * INCHES_TO_METERS;
 		actual_robot.transform.translation.z = 0.0;
 
-		q.setRPY(0,0,0);
+		q.setRPY(0,0,ck::math::deg2rad(180));
 		actual_robot.transform.rotation.x = q.x();
 		actual_robot.transform.rotation.y = q.y();
 		actual_robot.transform.rotation.z = q.z();
