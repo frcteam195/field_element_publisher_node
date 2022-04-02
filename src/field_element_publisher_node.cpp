@@ -1446,7 +1446,7 @@ void publish_auto_2_link()
 		actual_robot.transform.translation.y = 17.0 * INCHES_TO_METERS;
 		actual_robot.transform.translation.z = 0.0;
 
-		q.setRPY(0,0,0);
+		q.setRPY(0,0,ck::math::deg2rad(180));
 		actual_robot.transform.rotation.x = q.x();
 		actual_robot.transform.rotation.y = q.y();
 		actual_robot.transform.rotation.z = q.z();
@@ -1491,7 +1491,7 @@ void publish_auto_3_link()
 		actual_robot.transform.translation.y = -17.0 * INCHES_TO_METERS;
 		actual_robot.transform.translation.z = 0.0;
 
-		q.setRPY(0,0,0);
+		q.setRPY(0,0,ck::math::deg2rad(180));
 		actual_robot.transform.rotation.x = q.x();
 		actual_robot.transform.rotation.y = q.y();
 		actual_robot.transform.rotation.z = q.z();
